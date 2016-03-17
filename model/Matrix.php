@@ -1,6 +1,6 @@
 <?php
 
-require_once ("MatrixException.php");
+require_once("MatrixException.php");
 
 /**
  * Defines a matrix object.
@@ -18,7 +18,7 @@ require_once ("MatrixException.php");
  */
 class Matrix {
 
-    // Properties
+    // Properties.
 
     /**#@+
      * @access private
@@ -99,6 +99,7 @@ class Matrix {
      */
     var $_epsilon = 1E-18;
 
+    // Constructors.
 
     /**#@+
      * @access  public
@@ -114,6 +115,22 @@ class Matrix {
     function Matrix($data = null) {
         if (!is_null($data)) {
             $this->setData($data);
+        }
+    }
+
+    // Getters and Setters.
+
+    /**
+     * Returns the array of arrays.
+     *
+     * @return array
+     * @throws MatrixException
+     */
+    function getData () {
+        if ($this->isEmpty()) {
+            throw new MatrixException('Matrix has not been populated');
+        } else {
+            return $this->_data;
         }
     }
 
@@ -204,16 +221,32 @@ class Matrix {
     }
 
     /**
-     * Returns a new Matrix object with the same data as the current one
+     * Checks if it is a square matrix (i.e. num rows == num cols)
      *
-     * @return object Matrix
+     * @return boolean TRUE on success, FALSE otherwise
      * @throws MatrixException
      */
-    function cloneMatrix() {
+    function isSquare () {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         } else {
-            return new Matrix($this->_data);
+            return $this->_square;
+        }
+    }
+
+    /**
+     * Returns the Euclidean norm of the matrix.
+     *
+     * Euclidean norm = sqrt( sum( e[i][j]^2 ) )
+     *
+     * @return float
+     * @throws MatrixException
+     */
+    function norm() {
+        if (!is_null($this->_norm)) {
+            return $this->_norm;
+        } else {
+            throw new MatrixException('Uninitialized Matrix object');
         }
     }
 
@@ -391,23 +424,23 @@ class Matrix {
         }
     }
 
+    // Behavior.
+
     /**
-     * Transpose the matrix rows and columns
+     * Returns a new Matrix object with the same data as the current one
+     *
+     * @return object Matrix
+     * @throws MatrixException
      */
-    function transpose () {
-        list($nr, $nc) = $this->getSize();
-        $data = array();
-
-        for ($i = 0; $i < $nc; $i++) {
-            $col = $this->getCol($i);
-            $data[] = $col;
+    function cloneMatrix() {
+        if ($this->isEmpty()) {
+            throw new MatrixException('Matrix has not been populated');
+        } else {
+            return new Matrix($this->_data);
         }
-
-        return $this->setData($data);
     }
 
-
-    // Binary operations
+    // Binary operations.
 
     /**#@+
      * @access public
@@ -611,6 +644,111 @@ class Matrix {
         $mres->multiply($m2);
 
         return $mres;
+    }
+
+    // Algorithms.
+
+    /**
+     * Transpose the matrix rows and columns
+     */
+    function transpose () {
+        list($nr, $nc) = $this->getSize();
+        $data = array();
+
+        for ($i = 0; $i < $nc; $i++) {
+            $col = $this->getCol($i);
+            $data[] = $col;
+        }
+
+        return $this->setData($data);
+    }
+
+    /**
+     * Calculates the matrix determinant using Gaussian elimination with partial pivoting.
+     *
+     * At each step of the pivoting proccess, it checks that the normalized
+     * determinant calculated so far is less than 10^-18, trying to detect
+     * singular or ill-conditioned matrices
+     *
+     * @return number a number on success
+     * @throws MatrixException
+     */
+    function determinant() {
+        if (!is_null($this->_det) && is_numeric($this->_det)) {
+            return $this->_det;
+        } elseif ($this->isEmpty()) {
+            throw new MatrixException('Matrix has not been populated');
+        } elseif (!$this->isSquare()) {
+            throw new MatrixException('Determinant undefined for non-square matrices');
+        }
+
+        $norm = $this->norm();
+        $det = 1.0;
+        $sign = 1;
+
+        // Work on a copy.
+        $m = $this->cloneMatrix();
+        list($nr, $nc) = $m->getSize();
+
+        for ($r = 0; $r < $nr; $r++) {
+            // Find the maximum element in the column under the current diagonal element.
+            $ridx = $m->_maxElementIndex($r);
+
+            if ($ridx != $r) {
+                $sign = -$sign;
+                $e = $m->swapRows($r, $ridx);
+            }
+
+            // Pivoting element.
+            $pelement = $m->getElement($r, $r);
+            $det *= $pelement;
+
+            // Is this an singular or ill-conditioned matrix?
+            // i.e. is the normalized determinant << 1 and -> 0?
+            if ((abs($det)/$norm) < $this->_epsilon) {
+                throw new MatrixException('Probable singular or ill-conditioned matrix, normalized determinant = '
+                    .(abs($det)/$norm));
+            } elseif ($pelement == 0) {
+                throw new MatrixException('Cannot continue, pivoting element is zero');
+            }
+
+            // Zero all elements in column below the pivoting element.
+            for ($i = $r + 1; $i < $nr; $i++) {
+                $factor = $m->getElement($i, $r) / $pelement;
+                for ($j = $r; $j < $nc; $j++) {
+                    $val = $m->getElement($i, $j) - $factor*$m->getElement($r, $j);
+                    $e = $m->setElement($i, $j, $val);
+                }
+            }
+        }
+
+        unset($m);
+
+        if ($sign < 0) {
+            $det = -$det;
+        }
+
+        // Save the value.
+        $this->_det = $det;
+
+        return $det;
+    }
+
+    /**
+     * Returns the normalized determinant = abs(determinant)/(euclidean norm)
+     *
+     * @return number a positive number on success
+     * @throws MatrixException
+     */
+    function normalizedDeterminant() {
+        $det = $this->determinant();
+        $norm = $this->norm();
+
+        if ($norm == 0) {
+            throw new MatrixException('Undefined normalized determinant, euclidean norm is zero');
+        }
+
+        return abs($det / $norm);
     }
 
 }
