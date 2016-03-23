@@ -1,24 +1,33 @@
 <?php
 
-require_once("StatusCode.php");
+require_once("API.php");
 
 /**
  * Matrix API class computes the tasks and sends back a
  * response with a computed result.
  */
-class MatrixAPI {
+class MatrixAPI extends API {
 
-    /**
-     * Main method to compute a task.
-     */
-    function compute() {
-        // TODO: Check fot required paramers in POST method and compute the task.
+    //--------------------------------------------------------
+    // Constructors.
+    //--------------------------------------------------------
+
+    public function __construct($request, $origin) {
+        parent::__construct($request);
     }
-}
 
-// This is the first thing that gets called when this page is loaded.
-// Creates a new instance of the MatrixAPI class and calls the 'compute' method.
-$api = new MatrixAPI();
-$api->compute();
+    //--------------------------------------------------------
+    // Endpoints.
+    //--------------------------------------------------------
+
+    protected function example() {
+        if ($this->method == 'GET') {
+            return "This is work!!!";
+        } else {
+            return "Only accepts GET requests";
+        }
+    }
+
+}
 
 ?>
