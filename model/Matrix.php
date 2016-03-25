@@ -415,6 +415,141 @@ class Matrix {
     }
 
     /**
+     * Swaps the rows with the given indices
+     *
+     * @param integer $i
+     * @param integer $j
+     * @return boolean
+     * @throws Math_Matrix_Exception
+     * @throws InvalidArgumentException
+     */
+    function swapRows($i, $j) {
+        $r1 = $this->getRow($i);
+        $r2 = $this->getRow($j);
+        $e = $this->setRow($j, $r1);
+        $e = $this->setRow($i, $r2);
+
+        return true;
+    }
+
+    /**
+     * Swaps the columns with the given indices
+     *
+     * @param integer $i
+     * @param integer $j
+     * @return boolean
+     * @throws MatrixException
+     * @throws InvalidArgumentException
+     */
+    function swapCols($i, $j) {
+        $r1 = $this->getCol($i);
+        $r2 = $this->getCol($j);
+        $e = $this->setCol($j, $r1);
+        $e = $this->setCol($i, $r2);
+
+        return true;
+    }
+
+    /**
+     * Swaps a given row with a given column. Only valid for square matrices.
+     *
+     * @param integer $row index of row
+     * @param integer $col index of column
+     * @return boolean
+     * @throws MatrixException
+     * @throws InvalidArgumentException
+     */
+    function swapRowCol ($row, $col) {
+        if (!$this->isSquare() || !is_int($row) || !is_int($col)) {
+            throw new InvalidArgumentException("Parameters must be row and a column indices");
+        }
+        $c = $this->getCol($col);
+        $r = $this->getRow($row);
+        $e = $this->setCol($col, $r);
+        $e = $this->setRow($row, $c);
+        return true;
+    }
+
+    /**
+     * Returns the minimum value of the elements in the matrix
+     *
+     * @return number
+     * @throws MatrixException
+     */
+    function getMin () {
+        if ($this->isEmpty()) {
+            throw new MatrixException('Matrix has not been populated');
+        } else {
+            return $this->_min;
+        }
+    }
+
+    /**
+     * Returns the maximum value of the elements in the matrix
+     *
+     * @return number
+     * @throws MatrixException
+     */
+    function getMax () {
+        if ($this->isEmpty()) {
+            throw new MatrixException('Matrix has not been populated');
+        } else {
+            return $this->_max;
+        }
+    }
+
+    /**
+     * Gets the position of the first element with the given value
+     *
+     * @param numeric $val
+     * @return array an array of two numbers on success, FALSE if value is not found
+     * @throws MatrixException
+     */
+    function getValueIndex ($val) {
+        if ($this->isEmpty()) {
+            throw new MatrixException('Matrix has not been populated');
+        }
+        for ($i=0; $i < $this->_num_rows; $i++) {
+            for ($j=0; $j < $this->_num_cols; $j++) {
+                if ($this->_data[$i][$j] == $val) {
+                    return array($i, $j);
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Gets the position of the element with the minimum value
+     *
+     * @return array an array of two numbers on success, FALSE if value is not found
+     * @see getValueIndex()
+     * @throws MatrixException
+     */
+    function getMinIndex () {
+        if ($this->isEmpty()) {
+            throw new MatrixException('Matrix has not been populated');
+        } else {
+            return $this->getValueIndex($this->_min);
+        }
+    }
+
+    /**
+     * Gets the position of the element with the maximum value
+     *
+     * @return array an array of two numbers on success, FALSE if value is not found
+     * @see getValueIndex()
+     * @throws MatrixException
+     */
+    function getMaxIndex () {
+        if ($this->isEmpty()) {
+            throw new MatrixException('Matrix has not been populated');
+        } else {
+            return $this->getValueIndex($this->_max);
+        }
+    }
+
+    /**
      * Checks if the object is a Math_Matrix instance
      *
      * @param object Matrix $matrix
@@ -426,6 +561,69 @@ class Matrix {
         } else {
             return is_object($matrix) && (strtolower(get_class($matrix)) == "matrix");
         }
+    }
+
+    // Representations.
+
+    /**
+     * Returns a simple string representation of the matrix
+     *
+     * @param string $format
+     * @return string a string on success
+     * @throws MatrixException
+     * @param string $optional $format a sprintf() format used to print the matrix elements (default = '%6.2f')
+     */
+    function toString ($format = '%6.2f') {
+        if ($this->isEmpty()) {
+            throw new MatrixException('Matrix has not been populated');
+        }
+        $out = "";
+        for ($i = 0; $i < $this->_num_rows; $i++) {
+            for ($j = 0; $j < $this->_num_cols; $j++) {
+                // remove the -0.0 output
+                $entry = $this->_data[$i][$j];
+                if (sprintf('%2.1f', $entry) == '-0.0') {
+                    $entry = 0;
+                }
+                $out .= sprintf($format . " ", $entry);
+            }
+            $out .= "<br>";
+        }
+        return $out;
+    }
+
+    /**
+     * @return string
+     * @throws MatrixException
+     */
+    function __toString() {
+        return $this->toString();
+    }
+
+    /**
+     * Returns an HTML table representation of the matrix elements
+     *
+     * @return a string on success
+     */
+    function toHTML() {
+        if ($this->isEmpty()) {
+            throw new MatrixException('Matrix has not been populated');
+        }
+        $out = "<table border>\n\t<caption align=\"top\"><b>Matrix</b>";
+        $out .= "</caption>\n\t<tr align=\"center\">\n\t\t<th>";
+        $out .= $this->_num_rows."x".$this->_num_cols."</th>";
+        for ($i=0; $i < $this->_num_cols; $i++) {
+            $out .= "<th>".$i."</th>";
+        }
+        $out .= "\n\t</tr>\n";
+        for ($i=0; $i < $this->_num_rows; $i++) {
+            $out .= "\t<tr align=\"center\">\n\t\t<th>".$i."</th>";
+            for ($j=0; $j < $this->_num_cols; $j++) {
+                $out .= "<td bgcolor=\"#ffffdd\">".$this->_data[$i][$j]."</td>";
+            }
+            $out .= "\n\t</tr>";
+        }
+        return $out."\n</table>\n";
     }
 
     //--------------------------------------------------------
@@ -444,6 +642,32 @@ class Matrix {
         } else {
             return new Matrix($this->_data);
         }
+    }
+
+    // Private methods.
+
+    /**
+     * Returns the index of the row with the maximum value under column of the element e[i][i]
+     *
+     * @access private
+     * @return an integer
+     */
+    function _maxElementIndex($r) {
+        $max = 0;
+        $idx = -1;
+        list($nr, $nc) = $this->getSize();
+        $arr = array();
+        for ($i=$r; $i<$nr; $i++) {
+            $val = abs($this->_data[$i][$r]);
+            if ($val > $max) {
+                $max = $val;
+                $idx = $i;
+            }
+        }
+        if ($idx == -1) {
+            $idx = $r;
+        }
+        return $idx;
     }
 
     //--------------------------------------------------------
