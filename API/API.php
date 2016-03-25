@@ -45,7 +45,7 @@ abstract class API {
 
     /**
      * Property: file
-     * Stores the input of the PUT request
+     * Stores the input of the request
      */
     protected $file = Null;
 
@@ -86,6 +86,7 @@ abstract class API {
             case 'DELETE':
             case 'POST':
                 $this->request = $this->_cleanInputs($_POST);
+                $this->file = file_get_contents("php://input");
                 break;
             case 'GET':
                 $this->request = $this->_cleanInputs($_GET);

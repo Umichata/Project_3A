@@ -589,7 +589,7 @@ class Matrix {
                 }
                 $out .= sprintf($format . " ", $entry);
             }
-            $out .= "<br>";
+            $out .= "\n";
         }
         return $out;
     }
