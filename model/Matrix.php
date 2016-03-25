@@ -200,6 +200,8 @@ class Matrix {
             throw new InvalidArgumentException('Invalid data, cannot create/modify matrix.'.
                 ' Expecting an array of arrays or an initialized Matrix object');
         }
+
+        return false;
     }
 
     /**
@@ -420,7 +422,7 @@ class Matrix {
      * @param integer $i
      * @param integer $j
      * @return boolean
-     * @throws Math_Matrix_Exception
+     * @throws MatrixException
      * @throws InvalidArgumentException
      */
     function swapRows($i, $j) {
