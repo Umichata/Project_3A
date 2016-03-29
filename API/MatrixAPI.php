@@ -24,7 +24,7 @@ class MatrixAPI extends API {
 
     protected function example() {
         if ($this->method == 'GET') {
-            return "This is work!!!";
+            return "Matrix API is working!!!";
         } else {
             return "Only accepts GET requests";
         }
