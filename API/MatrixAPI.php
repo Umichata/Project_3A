@@ -36,8 +36,8 @@ class MatrixAPI extends API {
             $first_array  = (array) $body["first_matrix"];
             $second_array = (array) $body["second_matrix"];
 
-            $first_matrix  = new Matrix($first_array);
-            $second_matrix = new Matrix($second_array);
+            $first_matrix  = new Math_Matrix($first_array);
+            $second_matrix = new Math_Matrix($second_array);
 
             $first_matrix->add($second_matrix);
 
