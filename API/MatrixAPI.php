@@ -1,7 +1,8 @@
 <?php
 
 require_once("API.php");
-require_once(realpath(dirname(__FILE__) . "/../" . DIRECTORY_SEPARATOR . "model" . DIRECTORY_SEPARATOR . "Matrix.php"));
+require_once(realpath(dirname(__FILE__) . "/../" . DIRECTORY_SEPARATOR . "model" . DIRECTORY_SEPARATOR
+    . "matrix" . DIRECTORY_SEPARATOR . "Matrix.php"));
 
 /**
  * Matrix API class computes the tasks and sends back a

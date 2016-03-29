@@ -2,12 +2,8 @@
 
 /**
  * General Tuple class
- * A Tuple represents a general unidimensional list of n numeric elements
- * Originally this class was part of NumPHP (Numeric PHP package)
  *
- * @author  Jesus M. Castagnetto <jmcastagnetto@php.net>
- * @version 1.0
- * @package Math_Vector
+ * A Tuple represents a general unidimensional list of n numeric elements
  */
 class Math_Tuple
 {

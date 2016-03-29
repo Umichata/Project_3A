@@ -1,8 +1,8 @@
 <?php
 
 require_once "VectorException.php";
-require_once "Tuple.php";
 require_once "VectorOperation.php";
+require_once(realpath(dirname(__FILE__) . "/../" . DIRECTORY_SEPARATOR . "tuple" . DIRECTORY_SEPARATOR . "Tuple.php"));
 
 /**
  * General Vector class

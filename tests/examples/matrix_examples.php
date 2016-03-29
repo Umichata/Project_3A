@@ -4,7 +4,8 @@
  */
 
 // Path to /matrix/model/Matrix.php
-require_once(realpath(dirname(__FILE__) . "/../" . "/../" . DIRECTORY_SEPARATOR . "model" . DIRECTORY_SEPARATOR . "Matrix.php"));
+require_once(realpath(dirname(__FILE__) . "/../" . "/../" . DIRECTORY_SEPARATOR . "model" . DIRECTORY_SEPARATOR
+    . "matrix" . DIRECTORY_SEPARATOR . "Matrix.php"));
 
 $data = array(
     array(1.0, 2.0, 3.0, 4.0),
