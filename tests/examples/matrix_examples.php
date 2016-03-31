@@ -15,7 +15,7 @@ $data = array(
 );
 
 $m = new Math_Matrix($data);
-echo $m->toString() . "<br>";
+echo $m->toHTML() . "<br>";
 $det = $m->determinant();
 echo "Determinant = $det<br>";
 echo "Trace = " . $m->trace() . "<br>";
@@ -24,18 +24,18 @@ echo "Normalized Determinant = " . $m->normalizedDeterminant() . "<br>";
 
 echo "<br>Submatrix(1,1,2,2)<br>";
 $n = $m->getSubMatrix(1, 1, 2, 2);
-echo $n->toString() . "<br>";
+echo $n->toHTML("Submatrix") . "<br>";
 $det = $n->determinant();
 echo "Determinant = $det<br>";
 echo "Euclidean Norm = " . $n->norm() . "<br>";
 echo "Normalized Determinant = " . $n->normalizedDeterminant() . "<br>";
 
-echo $m->toString() . "<br>";
+echo $m->toHTML() . "<br>";
 echo "Product of matrix<br>";
 $q = $m->cloneMatrix();
 $q->scale(5);
 $q->multiply($m);
-echo $q->toString('%4.3f') . "<br>";
+echo $q->toHTML() . "<br>";
 
 $Adata = array(
     array(1, 1, 2),
@@ -55,16 +55,16 @@ $B1 = $B->cloneMatrix();
 
 $A1->multiply($B1);
 $B->multiply($A);
-echo $A1->toString() . "<br>";
-echo $B->toString() . "<br>";
+echo $A1->toHTML() . "<br>";
+echo $B->toHTML() . "<br>";
 
 echo "<br>Solving Ax = b<br>";
 $a = Math_Matrix::readFromFile('data.mat', 'csv');
-echo "<br>A<br>" . $a->toString() . "<br>";
+echo "<br>A<br>" . $a->toHTML("Matrix A") . "<br>";
 
 $b = new Math_Vector(range(1, 9));
 $x = Math_Matrix::solve($a, $b);
-echo "<br>A^-1<br>" . $a->toString('%8.4f') . "<br>";
+echo "<br>A^-1<br>" . $a->toHTML("Matrix A^-1") . "<br>";
 echo "B " . $b->toString() . "<br>";
 echo "Solution " . $x->toString() . "<br>";
 

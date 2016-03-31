@@ -941,7 +941,7 @@ class Math_Matrix
                 }
                 $out .= sprintf($format . " ", $entry);
             }
-            $out .= "<br>";
+            $out .= "\n";
         }
         return $out;
     }
@@ -954,15 +954,17 @@ class Math_Matrix
     /**
      * Returns an HTML table representation of the matrix elements
      *
+     * @param string $name - the name of the matrix table.
      * @return a string on success
+     * @throws MatrixException
      */
-    function toHTML()
+    function toHTML(string $name = "Matrix")
     {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         }
 
-        $out = "<table border>\n\t<caption align=\"top\"><b>Matrix</b>";
+        $out = "<table border>\n\t<caption align=\"top\"><b>$name</b>";
         $out .= "</caption>\n\t<tr align=\"center\">\n\t\t<th>";
         $out .= $this->_num_rows . "x" . $this->_num_cols . "</th>";
 

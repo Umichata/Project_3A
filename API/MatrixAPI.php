@@ -11,6 +11,17 @@ require_once(realpath(dirname(__FILE__) . "/../" . DIRECTORY_SEPARATOR . "model"
 class MatrixAPI extends API {
 
     //--------------------------------------------------------
+    // Properties.
+    //--------------------------------------------------------
+
+    const STATUS_MESSAGE_KEY = "status_message";
+    const STATUS_CODE_KEY = "status_code";
+
+    const LEFT_MATRIX_KEY = "left";
+    const RIGHT_MATRIX_KEY = "right";
+    const OPERATION_RESULT_KEY = "result";
+
+    //--------------------------------------------------------
     // Constructors.
     //--------------------------------------------------------
 
@@ -22,36 +33,54 @@ class MatrixAPI extends API {
     // Endpoints.
     //--------------------------------------------------------
 
-    protected function example() {
-        if ($this->method == 'GET') {
-            return "Matrix API is working!!!";
+    /**
+     * Computes addition of the matrices passed in POST body.
+     * Returns the result of that addition operation.
+     *
+     * @return array
+     * @throws MatrixException
+     */
+    protected function add() {
+        if ($this->isPostMethod()) {
+            $json = json_decode($this->file, true);
+
+            $lftArray = (array) $json[MatrixAPI::LEFT_MATRIX_KEY];
+            $rghArray = (array) $json[MatrixAPI::RIGHT_MATRIX_KEY];
+
+            $leftMatrix  = new Math_Matrix($lftArray);
+            $rightMatrix = new Math_Matrix($rghArray);
+
+            $leftMatrix->add($rightMatrix);
+
+            $result = array(
+                MatrixAPI::OPERATION_RESULT_KEY => $leftMatrix->getData()
+            );
+
+            return $result;
         } else {
-            return "Only accepts GET requests";
+            return $this->wrongMethodError();
         }
     }
 
-    protected function sum() {
-        if ($this->method == 'POST') {
-            $body = json_decode($this->file, true);
+    //--------------------------------------------------------
+    // Helpers.
+    //--------------------------------------------------------
 
-            $first_array  = (array) $body["first_matrix"];
-            $second_array = (array) $body["second_matrix"];
+    /**
+     * @return bool, success if requested method is POST type.
+     */
+    private function isPostMethod() {
+        return $this->method == 'POST';
+    }
 
-            $first_matrix  = new Math_Matrix($first_array);
-            $second_matrix = new Math_Matrix($second_array);
-
-            $first_matrix->add($second_matrix);
-
-            $result = array(
-                "result" => $first_matrix->toString(),
-            );
-
-            return json_encode($result);
-        } else {
-            return false;
-        }
+    /**
+     * @return array with error information.
+     */
+    private function wrongMethodError() {
+        return array(
+            MatrixAPI::STATUS_MESSAGE_KEY => "Supports only POST methods",
+            MatrixAPI::STATUS_CODE_KEY => 777
+        );
     }
 
 }
-
-?>
