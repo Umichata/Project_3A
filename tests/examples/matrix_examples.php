@@ -24,7 +24,7 @@ echo "Normalized Determinant = " . $m->normalizedDeterminant() . "<br>";
 
 echo "<br>Submatrix(1,1,2,2)<br>";
 $n = $m->getSubMatrix(1, 1, 2, 2);
-echo $n->toHTML("Submatrix") . "<br>";
+echo $n->toHTML() . "<br>";
 $det = $n->determinant();
 echo "Determinant = $det<br>";
 echo "Euclidean Norm = " . $n->norm() . "<br>";
@@ -60,11 +60,11 @@ echo $B->toHTML() . "<br>";
 
 echo "<br>Solving Ax = b<br>";
 $a = Math_Matrix::readFromFile('data.mat', 'csv');
-echo "<br>A<br>" . $a->toHTML("Matrix A") . "<br>";
+echo "<br>A<br>" . $a->toHTML() . "<br>";
 
 $b = new Math_Vector(range(1, 9));
 $x = Math_Matrix::solve($a, $b);
-echo "<br>A^-1<br>" . $a->toHTML("Matrix A^-1") . "<br>";
+echo "<br>A^-1<br>" . $a->toHTML() . "<br>";
 echo "B " . $b->toString() . "<br>";
 echo "Solution " . $x->toString() . "<br>";
 
