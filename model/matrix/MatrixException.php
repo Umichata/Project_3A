@@ -1,2 +1,4 @@
 <?php
-class MatrixException extends Exception {}
+
+class MatrixException extends Exception {
+}

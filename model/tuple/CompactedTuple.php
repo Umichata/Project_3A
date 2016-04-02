@@ -1,12 +1,10 @@
 <?php
 
-class Math_CompactedTuple
-{
+class Math_CompactedTuple {
 
     var $data;
 
-    public function __construct($arg)
-    {
+    public function __construct($arg) {
         if (is_array($arg)) {
             $this->data = $this->_genCompactedArray($arg);
         } elseif (is_object($arg) && get_class($arg) == "math_tuple") {
@@ -19,33 +17,27 @@ class Math_CompactedTuple
         }
     }
 
-    public function getSize()
-    {
+    public function getSize() {
         return count($this->_genUnCompactedArray($this->data));
     }
 
-    public function getCompactedSize()
-    {
+    public function getCompactedSize() {
         return count($this->data);
     }
 
-    public function getCompactedData()
-    {
+    public function getCompactedData() {
         return $this->data;
     }
 
-    public function getData()
-    {
+    public function getData() {
         return $this->_genUnCompactedArray($this->data);
     }
 
-    public function addElement($value)
-    {
+    public function addElement($value) {
         $this->data[$value]++;
     }
 
-    public function delElement($value)
-    {
+    public function delElement($value) {
         if (!in_array($value, array_keys($this->data))) {
             $this->data[$value]--;
             if ($this->data[$value] == 0) {
@@ -56,13 +48,11 @@ class Math_CompactedTuple
         throw new InvalidArgumentException("value does not exist in compacted tuple");
     }
 
-    public function hasElement($value)
-    {
+    public function hasElement($value) {
         return in_array($value, array_keys($this->data));
     }
 
-    public function _genCompactedArray($arr)
-    {
+    public function _genCompactedArray($arr) {
         if (function_exists("array_count_values")) {
             return array_count_values($arr);
         }
@@ -74,8 +64,7 @@ class Math_CompactedTuple
         return $out;
     }
 
-    public function _genUnCompactedArray($arr)
-    {
+    public function _genUnCompactedArray($arr) {
         $out = array();
         foreach ($arr as $val => $count) {
             for ($i = 0; $i < $count; $i++) {

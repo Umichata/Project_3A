@@ -1,6 +1,7 @@
 <?php
 
 require_once("API.php");
+require_once("MatrixAPIConstant.php");
 require_once(realpath(dirname(__FILE__) . "/../" . DIRECTORY_SEPARATOR . "model" . DIRECTORY_SEPARATOR
     . "matrix" . DIRECTORY_SEPARATOR . "Matrix.php"));
 
@@ -8,28 +9,13 @@ require_once(realpath(dirname(__FILE__) . "/../" . DIRECTORY_SEPARATOR . "model"
  * Matrix API class computes the tasks and sends back a
  * response with a computed result.
  */
-class MatrixAPI extends API
-{
+class MatrixAPI extends API {
 
     //--------------------------------------------------------
-    // Properties.
+    // Initializer.
     //--------------------------------------------------------
 
-    const STATUS_MESSAGE_KEY = "status_message";
-    const STATUS_CODE_KEY = "status_code";
-
-    const LEFT_MATRIX_KEY = "left";
-    const RIGHT_MATRIX_KEY = "right";
-    const MATRIX_KEY = "matrix";
-    const VECTOR_OF_VALUES = "vector";
-    const OPERATION_RESULT_KEY = "result";
-
-    //--------------------------------------------------------
-    // Constructors.
-    //--------------------------------------------------------
-
-    public function __construct($request, $origin)
-    {
+    public function __construct($request, $origin) {
         parent::__construct($request);
     }
 
@@ -42,25 +28,35 @@ class MatrixAPI extends API
      * Returns the result of that addition operation.
      *
      * @return array
-     * @throws MatrixException
      */
-    protected function add()
-    {
+    protected function add() {
         if ($this->isPostMethod()) {
-            $matrices = $this->matricesFromBinaryOperation();
+            $matrices = $this->matrixArrayFromBinaryOperation();
 
-            $leftMatrix = $matrices[0];
-            $rightMatrix = $matrices[1];
+            $leftMatrix = new Math_Matrix($matrices[0]);
+            $rightMatrix = new Math_Matrix($matrices[1]);
 
-            $leftMatrix->add($rightMatrix);
+            $failMessage = "Failed to process the addition operation.";
 
-            $result = array(
-                MatrixAPI::OPERATION_RESULT_KEY => $leftMatrix->getData()
-            );
+            try {
+                if ($leftMatrix->add($rightMatrix)) {
+                    $result = array_merge(
+                        $this->successResponseWithMessage("Addition operation is successfully completed."),
+                        array(MatrixAPIConstant::OPERATION_RESULT_KEY => $leftMatrix->getData())
+                    );
 
-            return $result;
+                    return $result;
+                } else {
+                    return $this->failResponseWithMessage($failMessage);
+                }
+            } catch (Exception $exception) {
+                return $this->failResponseWithMessage($failMessage
+                    . " "
+                    . $exception->getMessage()
+                    . ".");
+            }
         } else {
-            return $this->wrongMethodError();
+            return $this->sendWrongMethodResponse();
         }
     }
 
@@ -68,25 +64,35 @@ class MatrixAPI extends API
      * Computes subtract matrix from this ones.
      *
      * @return array
-     * @throws MatrixException
      */
-    protected function sub()
-    {
+    protected function sub() {
         if ($this->isPostMethod()) {
-            $matrices = $this->matricesFromBinaryOperation();
+            $matrices = $this->matrixArrayFromBinaryOperation();
 
-            $leftMatrix = $matrices[0];
-            $rightMatrix = $matrices[1];
+            $leftMatrix = new Math_Matrix($matrices[0]);
+            $rightMatrix = new Math_Matrix($matrices[1]);
 
-            $leftMatrix->sub($rightMatrix);
+            $failMessage = "Failed to process the subtract operation.";
 
-            $result = array(
-                MatrixAPI::OPERATION_RESULT_KEY => $leftMatrix->getData()
-            );
+            try {
+                if ($leftMatrix->sub($rightMatrix)) {
+                    $result = array_merge(
+                        $this->successResponseWithMessage("Subtract operation is successfully completed."),
+                        array(MatrixAPIConstant::OPERATION_RESULT_KEY => $leftMatrix->getData())
+                    );
 
-            return $result;
+                    return $result;
+                } else {
+                    return $this->failResponseWithMessage($failMessage);
+                }
+            } catch (Exception $exception) {
+                return $this->failResponseWithMessage($failMessage
+                    . " "
+                    . $exception->getMessage()
+                    . ".");
+            }
         } else {
-            return $this->wrongMethodError();
+            return $this->sendWrongMethodResponse();
         }
     }
 
@@ -95,48 +101,63 @@ class MatrixAPI extends API
      *
      * @return array
      */
-    protected function multiply()
-    {
+    protected function multiply() {
         if ($this->isPostMethod()) {
-            $matrices = $this->matricesFromBinaryOperation();
+            $matrices = $this->matrixArrayFromBinaryOperation();
 
-            $leftMatrix = $matrices[0];
-            $rightMatrix = $matrices[1];
+            $leftMatrix = new Math_Matrix($matrices[0]);
+            $rightMatrix = new Math_Matrix($matrices[1]);
 
-            $multiplyMatrix = Math_Matrix::multiplyMatrices($leftMatrix, $rightMatrix);
+            try {
+                $multiplyMatrix = Math_Matrix::multiplyMatrices($leftMatrix, $rightMatrix);
 
-            $result = array(
-                MatrixAPI::OPERATION_RESULT_KEY => $multiplyMatrix->getData()
-            );
+                $result = array_merge(
+                    $this->successResponseWithMessage("Multiply operation is successfully completed."),
+                    array(MatrixAPIConstant::OPERATION_RESULT_KEY => $multiplyMatrix->getData())
+                );
 
-            return $result;
+                return $result;
+            } catch (Exception $exception) {
+                return $this->failResponseWithMessage("Failed to process the multiply operation."
+                    . " "
+                    . $exception->getMessage()
+                    . ".");
+            }
         } else {
-            return $this->wrongMethodError();
+            return $this->sendWrongMethodResponse();
         }
     }
 
     /**
      * Transpose the matrix rows and columns.
      *
-     * @return array|string
-     * @throws MatrixException
+     * @return array
      */
-    protected function transpose()
-    {
+    protected function transpose() {
         if ($this->isPostMethod()) {
             $matrix = $this->matrixFromUnaryOperation();
 
-            if ($matrix->transpose()) {
-                $result = array(
-                    MatrixAPI::OPERATION_RESULT_KEY => $matrix->getData()
-                );
+            $failMessage = "Failed to process the transpose operation.";
 
-                return $result;
-            } else {
-                return "Failed to transpose the matrix";
+            try {
+                if ($matrix->transpose()) {
+                    $result = array_merge(
+                        $this->successResponseWithMessage("Transpose operation is successfully completed."),
+                        array(MatrixAPIConstant::OPERATION_RESULT_KEY => $matrix->getData())
+                    );
+
+                    return $result;
+                } else {
+                    return $this->failResponseWithMessage($failMessage);
+                }
+            } catch (Exception $exception) {
+                return $this->failResponseWithMessage($failMessage
+                    . " "
+                    . $exception->getMessage()
+                    . ".");
             }
         } else {
-            return $this->wrongMethodError();
+            return $this->sendWrongMethodResponse();
         }
     }
 
@@ -144,43 +165,57 @@ class MatrixAPI extends API
      * Calculates the matrix determinant.
      *
      * @return array
-     * @throws MatrixException
      */
-    protected function determinant()
-    {
+    protected function determinant() {
         if ($this->isPostMethod()) {
             $matrix = $this->matrixFromUnaryOperation();
-            $det = $matrix->determinant();
 
-            $result = array(
-                MatrixAPI::OPERATION_RESULT_KEY => $det
-            );
+            try {
+                $determinant = $matrix->determinant();
 
-            return $result;
+                $result = array_merge(
+                    $this->successResponseWithMessage("Determinant operation is successfully completed."),
+                    array(MatrixAPIConstant::OPERATION_RESULT_KEY => $determinant)
+                );
+
+                return $result;
+            } catch (Exception $exception) {
+                return $this->failResponseWithMessage("Failed to process the determinant operation."
+                    . " "
+                    . $exception->getMessage()
+                    . ".");
+            }
         } else {
-            return $this->wrongMethodError();
+            return $this->sendWrongMethodResponse();
         }
     }
 
     /**
-     * Inverts a matrix.
+     * Process invert operation on the matrix.
      *
      * @return array
-     * @throws MatrixException
      */
-    protected function invert()
-    {
+    protected function invert() {
         if ($this->isPostMethod()) {
             $matrix = $this->matrixFromUnaryOperation();
-            $matrix->invert();
 
-            $result = array(
-                MatrixAPI::OPERATION_RESULT_KEY => $matrix->getData()
-            );
+            try {
+                $matrix->invert();
 
-            return $result;
+                $result = array_merge(
+                    $this->successResponseWithMessage("Invert operation is successfully completed."),
+                    array(MatrixAPIConstant::OPERATION_RESULT_KEY => $matrix->getData())
+                );
+
+                return $result;
+            } catch (Exception $exception) {
+                return $this->failResponseWithMessage("Failed to process the invert operation."
+                    . " "
+                    . $exception->getMessage()
+                    . ".");
+            }
         } else {
-            return $this->wrongMethodError();
+            return $this->sendWrongMethodResponse();
         }
     }
 
@@ -189,24 +224,37 @@ class MatrixAPI extends API
      *
      * @return array
      */
-    protected function solve()
-    {
+    protected function solve() {
         if ($this->isPostMethod()) {
+            // Parse the JSON and access the values.
             $json = json_decode($this->file, true);
 
-            $coefficientsArray = (array)$json[MatrixAPI::MATRIX_KEY];
-            $matrix = new Math_Matrix($coefficientsArray);
+            // coefficientsMatrix is a matrix (A) of coefficients (aij, i=1..k, j=1..n).
+            $coefficientsArray = (array)$json[MatrixAPIConstant::MATRIX_KEY];
+            $coefficientsMatrix = new Math_Matrix($coefficientsArray);
 
-            $vectorArray = $json[MatrixAPI::VECTOR_OF_VALUES];
-            $vector = new Math_Vector($vectorArray);
+            // valuesVector is a vector (b) of values (bi, i=1..k).
+            $vectorArray = (array)$json[MatrixAPIConstant::VECTOR_OF_VALUES_KEY];
+            $valuesVector = new Math_Vector($vectorArray);
 
-            $solutionVector = Math_Matrix::solve($matrix, $vector);
+            try {
+                // Find the solution vector (x).
+                $solutionVector = Math_Matrix::solve($coefficientsMatrix, $valuesVector);
 
-            return array(
-                MatrixAPI::OPERATION_RESULT_KEY => $solutionVector->getData
-            );
+                $result = array_merge(
+                    $this->successResponseWithMessage("Solve a system of linear equations is successfully completed."),
+                    array(MatrixAPIConstant::OPERATION_RESULT_KEY => $solutionVector->getData())
+                );
+
+                return $result;
+            } catch (Exception $exception) {
+                return $this->failResponseWithMessage("Failed to solve a system of linear equations."
+                    . " "
+                    . $exception->getMessage()
+                    . ".");
+            }
         } else {
-            return $this->wrongMethodError();
+            return $this->sendWrongMethodResponse();
         }
     }
 
@@ -215,24 +263,39 @@ class MatrixAPI extends API
      *
      * @return array
      */
-    protected function solveec()
-    {
+    protected function solveec() {
         if ($this->isPostMethod()) {
+            // Parse the JSON and access the values.
             $json = json_decode($this->file, true);
 
-            $coefficientsArray = (array)$json[MatrixAPI::MATRIX_KEY];
-            $matrix = new Math_Matrix($coefficientsArray);
+            // coefficientsMatrix is a matrix (A) of coefficients (aij, i=1..k, j=1..n).
+            $coefficientsArray = (array)$json[MatrixAPIConstant::MATRIX_KEY];
+            $coefficientsMatrix = new Math_Matrix($coefficientsArray);
 
-            $vectorArray = $json[MatrixAPI::VECTOR_OF_VALUES];
-            $vector = new Math_Vector($vectorArray);
+            // valuesVector is a vector (b) of values (bi, i=1..k).
+            $vectorArray = (array)$json[MatrixAPIConstant::VECTOR_OF_VALUES_KEY];
+            $valuesVector = new Math_Vector($vectorArray);
 
-            $solutionVector = Math_Matrix::solveEC($matrix, $vector);
+            try {
+                // Find the solution vector (x).
+                $solutionVector = Math_Matrix::solveEC($coefficientsMatrix, $valuesVector);
 
-            return array(
-                MatrixAPI::OPERATION_RESULT_KEY => $solutionVector->getData
-            );
+                $result = array_merge(
+                    $this->successResponseWithMessage("Solve a system of linear equations, using an iterative error
+                    correction algorithm is successfully completed."),
+                    array(MatrixAPIConstant::OPERATION_RESULT_KEY => $solutionVector->getData())
+                );
+
+                return $result;
+            } catch (Exception $exception) {
+                return $this->failResponseWithMessage("Failed to solve a system of linear equations,
+                using an iterative error correction algorithm."
+                    . " "
+                    . $exception->getMessage()
+                    . ".");
+            }
         } else {
-            return $this->wrongMethodError();
+            return $this->sendWrongMethodResponse();
         }
     }
 
@@ -243,38 +306,30 @@ class MatrixAPI extends API
     /**
      * @return bool, success if requested method is POST type.
      */
-    private function isPostMethod()
-    {
+    private function isPostMethod() {
         return $this->method == 'POST';
     }
 
     /**
      * @return array with error information.
      */
-    private function wrongMethodError()
-    {
-        return array(
-            MatrixAPI::STATUS_MESSAGE_KEY => "Supports only POST methods",
-            MatrixAPI::STATUS_CODE_KEY => 777
-        );
+    private function sendWrongMethodResponse() {
+
+        return $this->failResponseWithMessage("Requested for unsupported method. Expected POST method.");
     }
 
     /**
-     * Returns an array of Math_Matrix objects.
+     * Returns an array of arrays.
      *
      * @return array
      */
-    private function matricesFromBinaryOperation()
-    {
+    private function matrixArrayFromBinaryOperation() {
         $json = json_decode($this->file, true);
 
-        $lftArray = (array)$json[MatrixAPI::LEFT_MATRIX_KEY];
-        $rghArray = (array)$json[MatrixAPI::RIGHT_MATRIX_KEY];
+        $lftArray = (array)$json[MatrixAPIConstant::LEFT_MATRIX_KEY];
+        $rghArray = (array)$json[MatrixAPIConstant::RIGHT_MATRIX_KEY];
 
-        $leftMatrix = new Math_Matrix($lftArray);
-        $rightMatrix = new Math_Matrix($rghArray);
-
-        return array($leftMatrix, $rightMatrix);
+        return array($lftArray, $rghArray);
     }
 
     /**
@@ -282,14 +337,31 @@ class MatrixAPI extends API
      *
      * @return Math_Matrix
      */
-    private function matrixFromUnaryOperation()
-    {
+    private function matrixFromUnaryOperation() {
         $json = json_decode($this->file, true);
 
-        $arr = (array)$json[MatrixAPI::MATRIX_KEY];
+        $arr = (array)$json[MatrixAPIConstant::MATRIX_KEY];
         $matrix = new Math_Matrix($arr);
 
         return $matrix;
+    }
+
+    /**
+     * @param string $message
+     * @return array
+     */
+    private function successResponseWithMessage($message) {
+        return array(
+            MatrixAPIConstant::STATUS_CODE_KEY => MatrixAPIConstant::SUCCESS_STATUS_CODE,
+            MatrixAPIConstant::STATUS_MESSAGE_KEY => $message
+        );
+    }
+
+    private function failResponseWithMessage($message) {
+        return array(
+            MatrixAPIConstant::STATUS_CODE_KEY => MatrixAPIConstant::FAIL_STATUS_CODE,
+            MatrixAPIConstant::STATUS_MESSAGE_KEY => $message
+        );
     }
 
 }

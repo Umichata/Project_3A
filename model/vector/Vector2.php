@@ -7,8 +7,7 @@ require_once "Vector.php";
  *
  * @access  public
  */
-class Math_Vector2 extends Math_Vector
-{
+class Math_Vector2 extends Math_Vector {
 
     /**
      * Constructor for Math_Vector2
@@ -16,8 +15,7 @@ class Math_Vector2 extends Math_Vector
      * @access  public
      * @param   mixed $arg an array of values, a Math_Tuple object or a Math_Vector2 object
      */
-    public function __construct($arg)
-    {
+    public function __construct($arg) {
         if (is_array($arg) && count($arg) != 2) {
             $this->tuple = null;
         } elseif (is_object($arg) && (strtolower(get_class($arg)) != "math_vector2"
@@ -39,8 +37,7 @@ class Math_Vector2 extends Math_Vector
      * @access  public
      * @return  numeric
      */
-    function getX()
-    {
+    function getX() {
         return $this->get(0);
     }
 
@@ -52,8 +49,7 @@ class Math_Vector2 extends Math_Vector
      * @return  mixed   true on success
      * @throws InvalidArgumentException
      */
-    function setX($val)
-    {
+    function setX($val) {
         return $this->set(0, $val);
     }
 
@@ -63,8 +59,7 @@ class Math_Vector2 extends Math_Vector
      * @access  public
      * @return  numeric
      */
-    function getY()
-    {
+    function getY() {
         return $this->get(1);
     }
 
@@ -76,8 +71,7 @@ class Math_Vector2 extends Math_Vector
      * @return  mixed   true on success
      * @throws InvalidArgumentException
      */
-    function setY($val)
-    {
+    function setY($val) {
         return $this->set(1, $val);
     }
 }

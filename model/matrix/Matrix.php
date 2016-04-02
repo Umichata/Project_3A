@@ -19,8 +19,7 @@ require_once(realpath(dirname(__FILE__) . "/../" . DIRECTORY_SEPARATOR . "vector
  *
  * @access      public
  */
-class Math_Matrix
-{
+class Math_Matrix {
 
     // Properties
 
@@ -116,8 +115,7 @@ class Math_Matrix
      * @see     $_data
      * @see     setData()
      */
-    function Math_Matrix($data = null)
-    {
+    function Math_Matrix($data = null) {
         if (!is_null($data)) {
             $this->setData($data);
         }
@@ -135,8 +133,7 @@ class Math_Matrix
      * @return  boolean
      * @throws InvalidArgumentException
      */
-    function setData($data)
-    {
+    function setData($data) {
         if (Math_Matrix::isMatrix($data)) {
             if (!$data->isEmpty()) {
                 $this->_data = $data->getData();
@@ -190,8 +187,7 @@ class Math_Matrix
      * @return array
      * @throws MatrixException
      */
-    function getData()
-    {
+    function getData() {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         } else {
@@ -208,8 +204,7 @@ class Math_Matrix
      * @return boolean
      * @throws InvalidArgumentException
      */
-    function setZeroThreshold($epsilon)
-    {
+    function setZeroThreshold($epsilon) {
         if (!is_numeric($epsilon)) {
             throw new InvalidArgumentException('Expection a number for threshold, using the old value: ' . $this->_epsilon);
         } else {
@@ -223,8 +218,7 @@ class Math_Matrix
      *
      * @return float
      */
-    function getZeroThreshold()
-    {
+    function getZeroThreshold() {
         return $this->_epsilon;
     }
 
@@ -233,8 +227,7 @@ class Math_Matrix
      *
      * @return boolean TRUE on success, FALSE otherwise
      */
-    function isEmpty()
-    {
+    function isEmpty() {
         return (empty($this->_data) || is_null($this->_data));
     }
 
@@ -245,8 +238,7 @@ class Math_Matrix
      * @return  array
      * @throws MatrixException
      */
-    function getSize()
-    {
+    function getSize() {
         if ($this->isEmpty())
             throw new MatrixException('Matrix has not been populated');
         else
@@ -258,8 +250,7 @@ class Math_Matrix
      * @return bool TRUE on success, FALSE otherwise
      * @throws MatrixException
      */
-    function isSquare()
-    {
+    function isSquare() {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         } else {
@@ -275,8 +266,7 @@ class Math_Matrix
      * @return float
      * @throws MatrixException
      */
-    function norm()
-    {
+    function norm() {
         if (!is_null($this->_norm)) {
             return $this->_norm;
         } else {
@@ -290,8 +280,7 @@ class Math_Matrix
      * @return object Math_Matrix
      * @throws MatrixException
      */
-    function cloneMatrix()
-    {
+    function cloneMatrix() {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         } else {
@@ -310,8 +299,7 @@ class Math_Matrix
      * @throws MatrixException
      * @throws InvalidArgumentException
      */
-    function setElement($row, $col, $value)
-    {
+    function setElement($row, $col, $value) {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         }
@@ -335,8 +323,7 @@ class Math_Matrix
      * @throws MatrixException
      * @throws InvalidArgumentException
      */
-    function getElement($row, $col)
-    {
+    function getElement($row, $col) {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         }
@@ -358,8 +345,7 @@ class Math_Matrix
      * @throws MatrixException
      * @throws InvalidArgumentException
      */
-    function getRow($row, $asVector = false)
-    {
+    function getRow($row, $asVector = false) {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         }
@@ -392,8 +378,7 @@ class Math_Matrix
      * @throws MatrixException
      * @throws InvalidArgumentException
      */
-    function setRow($row, $arr)
-    {
+    function setRow($row, $arr) {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         }
@@ -425,8 +410,7 @@ class Math_Matrix
      * @throws MatrixException
      * @throws InvalidArgumentException
      */
-    function getCol($col, $asVector = false)
-    {
+    function getCol($col, $asVector = false) {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         }
@@ -466,8 +450,7 @@ class Math_Matrix
      * @throws MatrixException
      * @throws InvalidArgumentException
      */
-    function setCol($col, $arr)
-    {
+    function setCol($col, $arr) {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         }
@@ -497,8 +480,7 @@ class Math_Matrix
      * @throws MatrixException
      * @throws InvalidArgumentException
      */
-    function swapRows($i, $j)
-    {
+    function swapRows($i, $j) {
         $r1 = $this->getRow($i);
         $r2 = $this->getRow($j);
         $e = $this->setRow($j, $r1);
@@ -516,8 +498,7 @@ class Math_Matrix
      * @throws MatrixException
      * @throws InvalidArgumentException
      */
-    function swapCols($i, $j)
-    {
+    function swapCols($i, $j) {
         $r1 = $this->getCol($i);
         $r2 = $this->getCol($j);
         $e = $this->setCol($j, $r1);
@@ -535,8 +516,7 @@ class Math_Matrix
      * @throws MatrixException
      * @throws InvalidArgumentException
      */
-    function swapRowCol($row, $col)
-    {
+    function swapRowCol($row, $col) {
         if (!$this->isSquare() || !is_int($row) || !is_int($col)) {
             throw new InvalidArgumentException("Parameters must be row and a column indices");
         }
@@ -553,8 +533,7 @@ class Math_Matrix
      * @return number
      * @throws MatrixException
      */
-    function getMin()
-    {
+    function getMin() {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         } else {
@@ -568,8 +547,7 @@ class Math_Matrix
      * @return number
      * @throws MatrixException
      */
-    function getMax()
-    {
+    function getMax() {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         } else {
@@ -584,8 +562,7 @@ class Math_Matrix
      * @return array an array of two numbers on success, FALSE if value is not found
      * @throws MatrixException
      */
-    function getValueIndex($val)
-    {
+    function getValueIndex($val) {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         }
@@ -606,8 +583,7 @@ class Math_Matrix
      * @see getValueIndex()
      * @throws MatrixException
      */
-    function getMinIndex()
-    {
+    function getMinIndex() {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         } else {
@@ -622,8 +598,7 @@ class Math_Matrix
      * @see getValueIndex()
      * @throws MatrixException
      */
-    function getMaxIndex()
-    {
+    function getMaxIndex() {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         } else {
@@ -637,8 +612,7 @@ class Math_Matrix
      * @return boolean TRUE on success
      * @throws MatrixException
      */
-    function transpose()
-    {
+    function transpose() {
         list($nr, $nc) = $this->getSize();
 
         $data = array();
@@ -656,8 +630,7 @@ class Math_Matrix
      * @return number a number on success
      * @throws MatrixException
      */
-    function trace()
-    {
+    function trace() {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         }
@@ -681,8 +654,7 @@ class Math_Matrix
      * @return number a number on success
      * @throws MatrixException
      */
-    function determinant()
-    {
+    function determinant() {
         if (!is_null($this->_det) && is_numeric($this->_det)) {
             return $this->_det;
         }
@@ -757,8 +729,7 @@ class Math_Matrix
      * @return number a positive number on success
      * @throws MatrixException
      */
-    function normalizedDeterminant()
-    {
+    function normalizedDeterminant() {
         $det = $this->determinant();
         $norm = $this->norm();
 
@@ -776,8 +747,7 @@ class Math_Matrix
      * @see scaleRow()
      * @throws MatrixException
      */
-    function invert()
-    {
+    function invert() {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         }
@@ -872,8 +842,7 @@ class Math_Matrix
      * @throws MatrixException
      * @throws InvalidArgumentException
      */
-    function &getSubMatrix($row, $col, $nrows, $ncols)
-    {
+    function &getSubMatrix($row, $col, $nrows, $ncols) {
         if (!is_numeric($row) || !is_numeric($col)
             || !is_numeric($nrows) || !is_numeric($ncols)
         ) {
@@ -903,8 +872,7 @@ class Math_Matrix
      * @return object Math_Vector Math_Vector on success
      * @throws MatrixException
      */
-    function &getDiagonal()
-    {
+    function &getDiagonal() {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         }
@@ -926,8 +894,7 @@ class Math_Matrix
      * @return string a string on success
      * @throws MatrixException
      */
-    function toString($format = '%6.2f')
-    {
+    function toString($format = '%6.2f') {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         }
@@ -946,8 +913,7 @@ class Math_Matrix
         return $out;
     }
 
-    function __toString()
-    {
+    function __toString() {
         return $this->toString();
     }
 
@@ -958,8 +924,7 @@ class Math_Matrix
      * @return a string on success
      * @throws MatrixException
      */
-    function toHTML()
-    {
+    function toHTML() {
         if ($this->isEmpty()) {
             throw new MatrixException('Matrix has not been populated');
         }
@@ -993,8 +958,7 @@ class Math_Matrix
      * @access private
      * @return an integer
      */
-    function _maxElementIndex($r)
-    {
+    function _maxElementIndex($r) {
         $max = 0;
         $idx = -1;
         list($nr, $nc) = $this->getSize();
@@ -1027,8 +991,7 @@ class Math_Matrix
      * @see getElement()
      * @see setData()
      */
-    function add(Math_Matrix $m1)
-    {
+    function add(Math_Matrix $m1) {
         if (!Math_Matrix::isMatrix($m1)) {
             throw new InvalidArgumentException("Parameter must be a Math_Matrix object");
         }
@@ -1068,8 +1031,7 @@ class Math_Matrix
      * @throws MatrixException
      * @throws InvalidArgumentException
      */
-    function sub(Math_Matrix &$m1)
-    {
+    function sub(Math_Matrix &$m1) {
         if (!Math_Matrix::isMatrix($m1)) {
             throw new InvalidArgumentException("Parameter must be a Math_Matrix object");
         }
@@ -1109,8 +1071,7 @@ class Math_Matrix
      * @see getElement()
      * @see setData()
      */
-    function scale($scale)
-    {
+    function scale($scale) {
         if (!is_numeric($scale)) {
             throw new InvalidArgumentException("Parameter must be a number");
         }
@@ -1141,8 +1102,7 @@ class Math_Matrix
      * @throws InvalidArgumentException
      * @see invert()
      */
-    function scaleRow($row, $factor)
-    {
+    function scaleRow($row, $factor) {
         if ($this->isEmpty()) {
             throw new MatrixException('Uninitialized Math_Matrix object');
         }
@@ -1179,8 +1139,7 @@ class Math_Matrix
      * @throws MatrixException
      * @throws InvalidArgumentException
      */
-    function multiply(Math_Matrix &$B)
-    {
+    function multiply(Math_Matrix &$B) {
         if (!Math_Matrix::isMatrix($B)) {
             throw new InvalidArgumentException('Wrong parameter, expected a Math_Matrix object');
         }
@@ -1226,8 +1185,7 @@ class Math_Matrix
      * @throws MatrixException
      * @throws InvalidArgumentException
      */
-    function &vectorMultiply(Math_Vector &$v1)
-    {
+    function &vectorMultiply(Math_Vector &$v1) {
         $validator = new Math_VectorOp();
         if (!$validator->isVector($v1)) {
             throw new InvalidArgumentException("Wrong parameter, a Math_Vector object");
@@ -1264,8 +1222,7 @@ class Math_Matrix
     /**
      * Create a matrix from a file, using data stored in the given format
      */
-    public static function readFromFile($filename, $format = 'serialized')
-    {
+    public static function readFromFile($filename, $format = 'serialized') {
         if (!file_exists($filename) || !is_readable($filename)) {
             throw new MatrixException('File cannot be opened for reading');
         }
@@ -1311,8 +1268,7 @@ class Math_Matrix
      * @throws InvalidArgumentException
      * @throws MatrixException
      */
-    public static function writeToFile(Math_Matrix $matrix, $filename, $format = 'serialized')
-    {
+    public static function writeToFile(Math_Matrix $matrix, $filename, $format = 'serialized') {
         if (!Math_Matrix::isMatrix($matrix)) {
             throw new InvalidArgumentException("Parameter must be a Math_Matrix object");
         }
@@ -1350,8 +1306,7 @@ class Math_Matrix
      * @param object Math_Matrix $matrix
      * @return boolean TRUE on success, FALSE otherwise
      */
-    public static function isMatrix(&$matrix)
-    {
+    public static function isMatrix(&$matrix) {
         if (function_exists("is_a")) {
             return is_object($matrix) && is_a($matrix, "Math_Matrix");
         } else {
@@ -1368,8 +1323,7 @@ class Math_Matrix
      * @return object Math_Matrix Math_Matrix instance on success otherwise
      * @throws InvalidArgumentException
      */
-    public static function makeMatrix($nrows, $ncols, $value)
-    {
+    public static function makeMatrix($nrows, $ncols, $value) {
         if (!is_int($nrows) && is_int($ncols) && !is_numeric($value)) {
             throw new InvalidArgumentException('Number of rows, columns, and a numeric fill value expected');
         }
@@ -1392,8 +1346,7 @@ class Math_Matrix
      * @return object Math_Matrix Math_Matrix instance on success
      * @see Math_Matrix::makeMatrix()
      */
-    public static function makeOne($nrows, $ncols)
-    {
+    public static function makeOne($nrows, $ncols) {
         return Math_Matrix::makeMatrix($nrows, $ncols, 1);
     }
 
@@ -1405,8 +1358,7 @@ class Math_Matrix
      * @return object Math_Matrix Math_Matrix instance on success
      * @see Math_Matrix::makeMatrix()
      */
-    public static function makeZero($nrows, $ncols)
-    {
+    public static function makeZero($nrows, $ncols) {
         return Math_Matrix::makeMatrix($nrows, $ncols, 0);
     }
 
@@ -1423,8 +1375,7 @@ class Math_Matrix
      * @see Math_Matrix::makeIdentity()
      * @throws InvalidArgumentException
      */
-    public static function makeUnit($size)
-    {
+    public static function makeUnit($size) {
         if (!is_integer($size)) {
             throw new InvalidArgumentException('An integer expected for the size of the Identity matrix');
         }
@@ -1451,8 +1402,7 @@ class Math_Matrix
      * @return object Math_Matrix a square unit Math_Matrix instance on success
      * @see Math_Matrix::makeUnit()
      */
-    public static function makeIdentity($size)
-    {
+    public static function makeIdentity($size) {
         return Math_Matrix::makeUnit($size);
     }
 
@@ -1465,8 +1415,7 @@ class Math_Matrix
      * @return object Math_Matrix a Hilber matrix on success
      * @throws InvalidArgumentException
      */
-    public static function makeHilbert($size)
-    {
+    public static function makeHilbert($size) {
         if (!is_integer($size)) {
             throw new InvalidArgumentException('An integer expected for the size of the Hilbert matrix');
         }
@@ -1500,8 +1449,7 @@ class Math_Matrix
      * @return object Math_Matrix a Hankel matrix on success
      * @throws InvalidArgumentException
      */
-    public static function makeHankel($c, $r = null)
-    {
+    public static function makeHankel($c, $r = null) {
         if (!is_array($c)) {
             throw new InvalidArgumentException('Expecting an array of values for the first column of the Hankel matrix');
         }
@@ -1565,10 +1513,10 @@ class Math_Matrix
      * @param object Math_Matrix $a the matrix of coefficients
      * @param object Math_Vector $b the vector of values
      * @return object Math_Vector a Math_Vector object on succcess
+     * @throws MatrixException
      * @see vectorMultiply()
      */
-    public static function solve(Math_Matrix $a, Math_Vector $b)
-    {
+    public static function solve(Math_Matrix $a, Math_Vector $b) {
         // check that the vector classes are defined
         if (!Math_Matrix::isMatrix($a) && !Math_VectorOp::isVector($b)) {
             throw new InvalidArgumentException('Incorrect parameters, expecting a Math_Matrix and a Math_Vector');
@@ -1623,8 +1571,7 @@ class Math_Matrix
      * @see Math_VectorOp::substract()
      * @see Math_VectorOp::length()
      */
-    public static function solveEC(Math_Matrix $a, Math_Vector $b)
-    {
+    public static function solveEC(Math_Matrix $a, Math_Vector $b) {
         $ainv = $a->cloneMatrix();
         $e = $ainv->invert();
 
@@ -1673,8 +1620,7 @@ class Math_Matrix
      * @throws MatrixException
      * @throws InvalidArgumentException
      */
-    public static function multiplyMatrices(&$m1, &$m2)
-    {
+    public static function multiplyMatrices(&$m1, &$m2) {
         $mres = $m1->cloneMatrix();
         $mres->multiply($m2);
         return $mres;

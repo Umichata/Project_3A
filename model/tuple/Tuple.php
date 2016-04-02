@@ -5,8 +5,7 @@
  *
  * A Tuple represents a general unidimensional list of n numeric elements
  */
-class Math_Tuple
-{
+class Math_Tuple {
     /**
      * array of numeric elements
      *
@@ -20,8 +19,7 @@ class Math_Tuple
      *
      * @param   array $data array of numbers
      */
-    public function __construct($data)
-    {
+    public function __construct($data) {
         if (is_array($data) || !is_array($data[0])) {
             $this->data = $data;
         } else {
@@ -34,8 +32,7 @@ class Math_Tuple
      *
      * @return  void
      */
-    public function squeezeHoles()
-    {
+    public function squeezeHoles() {
         $this->data = array_values($this->data);
     }
 
@@ -44,8 +41,7 @@ class Math_Tuple
      *
      * @return  integer
      */
-    public function getSize()
-    {
+    public function getSize() {
         return count($this->data);
     }
 
@@ -58,8 +54,7 @@ class Math_Tuple
      * @return  mixed   true if successful
      * @throws InvalidArgumentException
      */
-    public function setElement($elindex, $elvalue)
-    {
+    public function setElement($elindex, $elvalue) {
         if ($elindex >= $this->getSize()) {
             throw new InvalidArgumentException("Wrong index: $elindex for element: $elvalue");
         }
@@ -73,8 +68,7 @@ class Math_Tuple
      * @param   numeric $elvalue element value
      * @return  mixed   index of appended element on success
      */
-    public function addElement($elvalue)
-    {
+    public function addElement($elvalue) {
         if (!is_numeric($elvalue)) {
             throw new InvalidArgumentException("Error, a numeric value is needed. You used: $elvalue");
         }
@@ -90,8 +84,7 @@ class Math_Tuple
      * @return mixed   true on success
      * @throws InvalidArgumentException
      */
-    public function delElement($elindex)
-    {
+    public function delElement($elindex) {
         if ($elindex >= $this->getSize()) {
             throw new InvalidArgumentException("Wrong index: $elindex, element not deleted");
         }
@@ -108,8 +101,7 @@ class Math_Tuple
      * @return  mixed   numeric on success
      * @throws InvalidArgumentException
      */
-    public function getElement($elindex)
-    {
+    public function getElement($elindex) {
         if ($elindex >= $this->getSize()) {
             throw new InvalidArgumentException("Wrong index: $elindex, Tuple size is: " . $this->getSize());
         }
@@ -121,8 +113,7 @@ class Math_Tuple
      *
      * @return  $array
      */
-    public function getData()
-    {
+    public function getData() {
         $this->squeezeHoles();
         return $this->data;
     }
@@ -133,8 +124,7 @@ class Math_Tuple
      * @access  public
      * @return  numeric
      */
-    public function getMin()
-    {
+    public function getMin() {
         return min($this->getData());
     }
 
@@ -143,8 +133,7 @@ class Math_Tuple
      *
      * @return  numeric
      */
-    public function getMax()
-    {
+    public function getMax() {
         return max($this->getData());
     }
 
@@ -154,8 +143,7 @@ class Math_Tuple
      * @access  public
      * @return  array of the minimum and maximum values
      */
-    public function getMinMax()
-    {
+    public function getMinMax() {
         return array($this->getMin(), $this->getMax());
     }
 
@@ -165,8 +153,7 @@ class Math_Tuple
      * @param   numeric $val value for which the index is requested
      * @return  integer
      */
-    public function getValueIndex($val)
-    {
+    public function getValueIndex($val) {
         for ($i = 0; $i < $this->getSize(); $i++) {
             if ($this->data[$i] == $val) {
                 return $i;
@@ -180,8 +167,7 @@ class Math_Tuple
      *
      * @return  integer
      */
-    public function getMinIndex()
-    {
+    public function getMinIndex() {
         return $this->getValueIndex($this->getMin());
     }
 
@@ -190,8 +176,7 @@ class Math_Tuple
      *
      * @return  integer
      */
-    public function getMaxIndex()
-    {
+    public function getMaxIndex() {
         return $this->getValueIndex($this->getMax());
     }
 
@@ -200,8 +185,7 @@ class Math_Tuple
      *
      * @return  array of integers indexes
      */
-    public function getMinMaxIndex()
-    {
+    public function getMinMaxIndex() {
         return array($this->getMinIndex(), $this->getMaxIndex());
     }
 
@@ -210,8 +194,7 @@ class Math_Tuple
      *
      * @return  boolean
      */
-    public function isZero()
-    {
+    public function isZero() {
         for ($i = 0; $i < $this->getSize(); $i++) {
             if ($this->data[$i] != 0) {
                 return false;
@@ -226,8 +209,7 @@ class Math_Tuple
      * @access  public
      * @return  string
      */
-    public function toString()
-    {
+    public function toString() {
         return "{ " . implode(", ", $this->data) . " }";
     }
 
@@ -237,8 +219,7 @@ class Math_Tuple
      * @access  public
      * @return  string
      */
-    public function __toString()
-    {
+    public function __toString() {
         return $this->toString();
     }
 
@@ -248,8 +229,7 @@ class Math_Tuple
      * @access  public
      * @return  string
      */
-    public function toHTML()
-    {
+    public function toHTML() {
         $out = "<table border>\n\t<caption align=\"top\"><b>Vector</b></caption>\n";
         $out .= "\t<tr align=\"center\">\n\t\t<th>i</th><th>value</th>\n\t</tr>\n";
         for ($i = 0; $i < $this->getSize(); $i++) {

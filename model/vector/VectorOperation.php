@@ -6,16 +6,14 @@
  *
  * @access  public
  */
-class Math_VectorOp
-{
+class Math_VectorOp {
     /**
      * Checks if object is of Math_Vector class (or a subclass of Math_Vector)
      *
      * @param   object $obj
      * @return  boolean true on success
      */
-    public static function isVector(Math_Vector $obj)
-    {
+    public static function isVector(Math_Vector $obj) {
         if (function_exists("is_a")) {
             return (is_object($obj) && is_a($obj, "Math_Vector"));
         }
@@ -29,8 +27,7 @@ class Math_VectorOp
      * @param   object $obj
      * @return  boolean true on success
      */
-    public static function isVector2(Math_Vector $obj)
-    {
+    public static function isVector2(Math_Vector $obj) {
         if (function_exists("is_a")) {
             return (is_object($obj) && is_a($obj, "Math_Vector2"));
         }
@@ -45,8 +42,7 @@ class Math_VectorOp
      *
      * @return  boolean true on success
      */
-    public static function isVector3(Math_Vector $obj)
-    {
+    public static function isVector3(Math_Vector $obj) {
         if (function_exists("is_a")) {
             return (is_object($obj) && is_a($obj, "Math_Vector3"));
         }
@@ -61,8 +57,7 @@ class Math_VectorOp
      * @param   numeric $value value to assign to the elements
      * @return  object  if ($size == 2) Math_Vector2 elseif ($size == 3) Math_Vector3 else Math_Vector
      */
-    public static function create($size, $value)
-    {
+    public static function create($size, $value) {
         if ($size == 2) {
             $VClass = "Math_Vector2";
         } elseif ($size == 3) {
@@ -81,8 +76,7 @@ class Math_VectorOp
      *
      * @see create()
      */
-    public static function createZero($size)
-    {
+    public static function createZero($size) {
         return Math_VectorOp::create($size, 0);
     }
 
@@ -94,8 +88,7 @@ class Math_VectorOp
      *
      * @see create()
      */
-    public static function createOne($size)
-    {
+    public static function createOne($size) {
         return Math_VectorOp::create($size, 1);
     }
 
@@ -111,8 +104,7 @@ class Math_VectorOp
      *
      * @see createZero()
      */
-    public static function createBasis($size, $index)
-    {
+    public static function createBasis($size, $index) {
         if ($index >= $size) {
             throw new InvalidArgumentException("Incorrect index for size: $index >= $size");
         }
@@ -132,8 +124,7 @@ class Math_VectorOp
      * @throws InvalidArgumentException
      * @see     isVector()
      */
-    public static function add(Math_Vector $v1, Math_Vector $v2)
-    {
+    public static function add(Math_Vector $v1, Math_Vector $v2) {
         if (Math_VectorOp::isVector($v1) && Math_VectorOp::isVector($v2)) {
             $n = $v1->size();
             if ($v2->size() != $n) {
@@ -158,8 +149,7 @@ class Math_VectorOp
      *
      * @see     isVector()
      */
-    public static function substract($v1, $v2)
-    {
+    public static function substract($v1, $v2) {
         if (Math_VectorOp::isVector($v1) && Math_VectorOp::isVector($v2)) {
             $n = $v1->size();
             if ($v2->size() != $n) {
@@ -188,8 +178,7 @@ class Math_VectorOp
      *
      * @see     isVector()
      */
-    public function multiply(Math_Vector $v1, Math_Vector $v2)
-    {
+    public function multiply(Math_Vector $v1, Math_Vector $v2) {
         if (Math_VectorOp::isVector($v1) && Math_VectorOp::isVector($v2)) {
             $n = $v1->size();
             if ($v2->size() != $n) {
@@ -218,8 +207,7 @@ class Math_VectorOp
      *
      * @see     isVector()
      */
-    public static function scale($f, $v)
-    {
+    public static function scale($f, $v) {
         if (is_numeric($f) && Math_VectorOp::isVector($v)) {
             $arr = array();
             $n = $v->size();
@@ -245,8 +233,7 @@ class Math_VectorOp
      *
      * @see     isVector()
      */
-    public static function divide($v1, $v2)
-    {
+    public static function divide($v1, $v2) {
         if (Math_VectorOp::isVector($v1) && Math_VectorOp::isVector($v2)) {
             $n = $v1->size();
             if ($v2->size() != $n) {
@@ -279,8 +266,7 @@ class Math_VectorOp
      * @see     isVector2()
      * @see     isVector3()
      */
-    public static function dotProduct($v1, $v2)
-    {
+    public static function dotProduct($v1, $v2) {
         if (Math_VectorOp::isVector2($v1) && Math_VectorOp::isVector2($v2)) {
             return ($v1->getX() * $v2->getX() +
                 $v1->getY() * $v2->getY());
@@ -302,8 +288,7 @@ class Math_VectorOp
      *
      * @see     isVector3()
      */
-    public static function crossProduct($v1, $v2)
-    {
+    public static function crossProduct($v1, $v2) {
         if (Math_VectorOp::isVector3($v1) && Math_VectorOp::isVector3($v2)) {
             $arr[0] = $v1->getY() * $v2->getZ() - $v1->getZ() * $v2->getY();
             $arr[1] = $v1->getZ() * $v2->getX() - $v1->getX() * $v2->getZ();
@@ -328,8 +313,7 @@ class Math_VectorOp
      * @see     dotProduct()
      * @see     crossProduct()
      */
-    public static function tripleScalarProduct($v1, $v2, $v3)
-    {
+    public static function tripleScalarProduct($v1, $v2, $v3) {
         if (Math_VectorOp::isVector3($v1)
             && Math_VectorOp::isVector3($v2)
             && Math_VectorOp::isVector3($v3)
@@ -351,10 +335,10 @@ class Math_VectorOp
      * @see     isVector3()
      * @see     dotProduct()
      */
-    public static function angleBetween($v1, $v2)
-    {
+    public static function angleBetween($v1, $v2) {
         if ((Math_VectorOp::isVector2($v1) && Math_VectorOp::isVector2($v2)) ||
-            (Math_VectorOp::isVector3($v1) && Math_VectorOp::isVector3($v2))) {
+            (Math_VectorOp::isVector3($v1) && Math_VectorOp::isVector3($v2))
+        ) {
             $v1->normalize();
             $v2->normalize();
 
@@ -374,8 +358,7 @@ class Math_VectorOp
      * @param   numeric $value value to use for filling the array
      * @return  array
      */
-    static function _fill($index, $size, $value)
-    {
+    static function _fill($index, $size, $value) {
         if (function_exists("array_fill")) {
             return array_fill($index, $size, $value);
         }

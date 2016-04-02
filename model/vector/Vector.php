@@ -9,8 +9,7 @@ require_once(realpath(dirname(__FILE__) . "/../" . DIRECTORY_SEPARATOR . "tuple"
  *
  * @access  public
  */
-class Math_Vector
-{
+class Math_Vector {
     /**
      * Math_Tuple object
      *
@@ -26,8 +25,7 @@ class Math_Vector
      *
      * @see setData()
      */
-    public function __construct($data = null)
-    {
+    public function __construct($data = null) {
         if (!is_null($data)) {
             $this->setData($data);
         }
@@ -41,8 +39,7 @@ class Math_Vector
      * @return  boolean
      * @throws InvalidArgumentException
      */
-    public function setData($data)
-    {
+    public function setData($data) {
         if (is_array($data)) {
             $tuple = new Math_Tuple($data);
         } elseif (is_object($data) && strtolower(get_class($data)) == "math_tuple") {
@@ -62,8 +59,7 @@ class Math_Vector
      * @return array
      * @throws Math_Vector_Exception
      */
-    public function getData()
-    {
+    public function getData() {
         if ($this->isValid()) {
             return $this->_tuple->getData();
         }
@@ -75,8 +71,7 @@ class Math_Vector
      *
      * @return  boolean
      */
-    public function isValid()
-    {
+    public function isValid() {
         return (!is_null($this->_tuple) && is_object($this->_tuple) &&
             strtolower(get_class($this->_tuple)) == "math_tuple");
     }
@@ -86,8 +81,7 @@ class Math_Vector
      *
      * @return  float
      */
-    public function lengthSquared()
-    {
+    public function lengthSquared() {
         $n = $this->size();
         $sum = 0;
         for ($i = 0; $i < $n; $i++) {
@@ -101,8 +95,7 @@ class Math_Vector
      *
      * @return  float
      */
-    public function length()
-    {
+    public function length() {
         return sqrt($this->lengthSquared());
     }
 
@@ -111,8 +104,7 @@ class Math_Vector
      *
      * @return  float
      */
-    public function magnitude()
-    {
+    public function magnitude() {
         return $this->length();
     }
 
@@ -121,8 +113,7 @@ class Math_Vector
      *
      * @return  void
      */
-    public function normalize()
-    {
+    public function normalize() {
         $n = $this->size();
         $length = $this->length();
         for ($i = 0; $i < $n; $i++) {
@@ -135,8 +126,7 @@ class Math_Vector
      *
      * @return  object  Math_Tuple
      */
-    public function getTuple()
-    {
+    public function getTuple() {
         return $this->_tuple;
     }
 
@@ -145,8 +135,7 @@ class Math_Vector
      *
      * @return  float
      */
-    public function size()
-    {
+    public function size() {
         return $this->_tuple->getSize();
     }
 
@@ -155,8 +144,7 @@ class Math_Vector
      *
      * @return  void
      */
-    public function reverse()
-    {
+    public function reverse() {
         $n = $this->size();
         for ($i = 0; $i < $n; $i++) {
             $this->_tuple->setElement($i, -1 * $this->_tuple->getElement($i));
@@ -170,8 +158,7 @@ class Math_Vector
      *
      * @see     reverse()
      */
-    public function conjugate()
-    {
+    public function conjugate() {
         $this->reverse();
     }
 
@@ -182,8 +169,7 @@ class Math_Vector
      *
      * @return  mixed   void on success
      */
-    public function scale($f)
-    {
+    public function scale($f) {
         if (!is_numeric($f)) {
             throw new InvalidArgumentException("Requires a numeric factor and a Math_Vector object");
         }
@@ -203,8 +189,7 @@ class Math_Vector
      * @return  mixed   true on success
      * @throws InvalidArgumentException
      */
-    public function set($i, $value)
-    {
+    public function set($i, $value) {
         $this->_tuple->setElement($i, $value);
         return true;
     }
@@ -217,8 +202,7 @@ class Math_Vector
      * @return  mixed   the element value (numeric) on success
      * @throws InvalidArgumentException
      */
-    public function get($i)
-    {
+    public function get($i) {
         return $this->_tuple->getElement($i);
     }
 
@@ -231,8 +215,7 @@ class Math_Vector
      * @return  float on success
      * @throws InvalidArgumentException
      */
-    public function distance(Math_Vector $vector, $type = 'cartesian')
-    {
+    public function distance(Math_Vector $vector, $type = 'cartesian') {
         switch ($type) {
             case 'manhattan':
             case 'city':
@@ -254,8 +237,7 @@ class Math_Vector
      * @return  float on success
      * @throws InvalidArgumentException
      */
-    public function cartesianDistance(Math_Vector $vector)
-    {
+    public function cartesianDistance(Math_Vector $vector) {
         $n = $this->size();
         $sum = 0;
         if (!Math_VectorOp::isVector($vector)) {
@@ -279,8 +261,7 @@ class Math_Vector
      * @return  float on success
      * @throws InvalidArgumentException
      */
-    public function manhattanDistance(Math_Vector $vector)
-    {
+    public function manhattanDistance(Math_Vector $vector) {
         if (!Math_VectorOp::isVector($vector)) {
             throw new InvalidArgumentException("Wrong parameter type, expecting a Math_Vector object");
         }
@@ -304,8 +285,7 @@ class Math_Vector
      * @return  float on success
      * @throws InvalidArgumentException
      */
-    public function chessboardDistance(Math_Vector $vector)
-    {
+    public function chessboardDistance(Math_Vector $vector) {
         if (!Math_VectorOp::isVector($vector)) {
             throw new InvalidArgumentException("Wrong parameter type, expecting a Math_Vector object");
         }
@@ -326,8 +306,7 @@ class Math_Vector
      *
      * @return  string
      */
-    public function toString()
-    {
+    public function toString() {
         return "Vector: < " . implode(", ", $this->_tuple->getData()) . " >";
     }
 
@@ -336,8 +315,7 @@ class Math_Vector
      *
      * @return  string
      */
-    public function __toString()
-    {
+    public function __toString() {
         return $this->toString();
     }
 }
